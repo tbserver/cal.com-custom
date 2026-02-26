@@ -176,6 +176,22 @@ export const EventMeta = ({
           <EventTitle className={`${classNames?.eventMetaTitle} my-2`}>
             {translatedTitle ?? event?.title}
           </EventTitle>
+
+          {/* Custom braderie info block */}
+          <div className="my-4 rounded-lg bg-gray-50 px-4 py-3 text-sm leading-relaxed text-gray-700">
+            <p className="mb-2 text-base font-bold uppercase text-gray-900">
+              Merci pour votre inscription !
+            </p>
+            <p className="mb-3 text-gray-600">
+              Vous allez recevoir un email avec toutes les informations de la braderie Tammy &amp; Benjamin.
+            </p>
+            <div className="border-t border-gray-200 pt-3">
+              <p className="font-semibold text-gray-900">On se retrouve du 6 au 10 mars</p>
+              <p className="mt-1">📍 33 Rue de Poitou, 75003 Paris</p>
+              <p>🕐 Tous les jours de 12h à 19h30</p>
+            </div>
+          </div>
+
           {(event.description || translatedDescription) && (
             <EventMetaBlock data-testid="event-meta-description" contentClassName="mb-8">
               <ScrollableWithGradients
