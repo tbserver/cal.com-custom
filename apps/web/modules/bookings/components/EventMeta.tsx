@@ -156,7 +156,7 @@ export const EventMeta = ({
   );
 
   return (
-    <div className={`${classNames?.eventMetaContainer || ""} relative z-10 p-6`} data-testid="event-meta">
+    <div className={`${classNames?.eventMetaContainer || ""} relative z-10 p-6 text-center`} data-testid="event-meta">
       {isPending && (
         <m.div {...fadeInUp} initial="visible" layout>
           <EventMetaSkeleton />
@@ -190,7 +190,7 @@ export const EventMeta = ({
               </ScrollableWithGradients>
             </EventMetaBlock>
           )}
-          <div className="stack-y-4 font-medium rtl:-mr-2">
+          <div className="stack-y-4 font-medium rtl:-mr-2 flex flex-col items-center">
             {rescheduleUid && bookingData && (
               <EventMetaBlock icon="calendar">
                 {t("former_time")}

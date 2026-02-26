@@ -8,6 +8,9 @@ fi
 
 echo "Replacing all statically built instances of $FROM with $TO."
 
-for file in $(egrep -r -l "${FROM}" apps/web/.next/ apps/web/public/); do
-    sed -i -e "s|$FROM|$TO|g" "$file"
-done
+# Use find + grep to handle filenames with special characters (brackets, etc.)
+find apps/web/.next/ apps/web/public/ -type f -print0 2>/dev/null \
+    | xargs -0 grep -l "${FROM}" 2>/dev/null \
+    | while IFS= read -r file; do
+        sed -i -e "s|$FROM|$TO|g" "$file"
+    done
