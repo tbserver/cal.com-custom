@@ -179,6 +179,9 @@ export const EventMeta = ({
               <p className="mt-1">📍 33 Rue de Poitou, 75003 Paris</p>
               <p>🕐 Tous les jours de 12h à 19h30</p>
             </div>
+            <p className="mt-4 text-lg font-semibold text-gray-900">
+              Vous pouvez également réserver un créneau personnalisé ci-dessous
+            </p>
           </div>
 
           {/* Hidden: avatar + "TAMMY & BENJAMIN - Braderie" + event title */}

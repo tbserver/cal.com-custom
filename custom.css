@@ -11,4 +11,29 @@ body, body * {
   letter-spacing: 1px;
 }
 
+/* Réduire l'espace au-dessus du calendrier */
+[data-testid="event-meta"] {
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.25rem !important;
+}
+
+/* Cacher le bloc Quoi/Quand/Qui/Où sur la page de confirmation */
+[data-testid="success-page"] .grid.grid-cols-3 {
+  display: none !important;
+}
+
+/* Fond blanc sur la page de confirmation */
+[data-testid="success-page"],
+[data-testid="success-page"] *,
+[data-testid="success-page"] .bg-default,
+[data-testid="success-page"] .bg-cal-muted,
+[data-testid="success-page"] .bg-subtle {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+}
+/* Aussi enlever la bordure du conteneur carte */
+[data-testid="success-page"] .border-booker {
+  border: none !important;
+}
+
 
