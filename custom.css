@@ -17,10 +17,7 @@ body, body * {
   padding-bottom: 0.25rem !important;
 }
 
-/* Cacher le bloc Quoi/Quand/Qui/Où sur la page de confirmation */
-[data-testid="success-page"] .grid.grid-cols-3 {
-  display: none !important;
-}
+/* Bloc Quoi/Quand/Qui/Où masqué dans le code source */
 
 /* Fond blanc sur la page de confirmation */
 [data-testid="success-page"],

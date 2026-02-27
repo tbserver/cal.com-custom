@@ -107,7 +107,7 @@ const useBrandColors = ({
 };
 
 export default function Success(props: PageProps) {
-  const { t } = useLocale();
+  const { t, i18n: { language: successLanguage } } = useLocale();
   const router = useRouter();
   const routerQuery = useRouterQuery();
   const pathname = usePathname();
@@ -459,7 +459,9 @@ export default function Success(props: PageProps) {
       return t("event_is_in_the_past");
     }
 
-    return isRecurringBooking ? t("meeting_is_scheduled_recurring") : t("meeting_is_scheduled");
+    const formattedDate = formatToLocalizedDate(date, successLanguage, "full", tz);
+    const formattedTime = formatToLocalizedTime({ date, locale: successLanguage, hour12: !is24h, timeZone: tz });
+    return `Votre rendez-vous est confirmé le ${formattedDate} à ${formattedTime}`;
   })();
 
   return (
@@ -566,149 +568,14 @@ export default function Success(props: PageProps) {
                         (bookingInfo.status === BookingStatus.CANCELLED ||
                           bookingInfo.status === BookingStatus.REJECTED) && <h4>{paymentStatusMessage}</h4>}
 
-                      <div className="border-subtle text-default mt-8 grid grid-cols-3 gap-x-4 border-t pt-8 text-left rtl:text-right sm:gap-x-0">
-                        {(isCancelled || reschedule) && cancellationReason && (
-                          <>
-                            <div className="font-medium">
-                              {isCancelled ? t("reason") : t("reschedule_reason")}
-                            </div>
-                            <div className="col-span-2 mb-6 last:mb-0">
-                              <p className="wrap-break-word">{cancellationReason}</p>
-                            </div>
-                          </>
-                        )}
-                        {isCancelled &&
-                          bookingInfo?.cancelledBy &&
-                          !(bookingInfo.eventType?.hideOrganizerEmail && !isHost) && (
-                            <>
-                              <div className="font-medium">{t("cancelled_by")}</div>
-                              <div className="col-span-2 mb-6 last:mb-0">
-                                <p className="wrap-break-word">{bookingInfo?.cancelledBy}</p>
-                              </div>
-                            </>
-                          )}
-                        {previousBooking && (
-                          <>
-                            <div className="font-medium">{t("rescheduled_by")}</div>
-                            <div className="col-span-2 mb-6 last:mb-0">
-                              <p className="wrap-break-word">{previousBooking?.rescheduledBy}</p>
-                              <Link className="text-sm underline" href={`/booking/${previousBooking?.uid}`}>
-                                {t("original_booking")}
-                              </Link>
-                            </div>
-                          </>
-                        )}
-                        <div className="font-medium">{t("what")}</div>
-                        <div
-                          className="wrap-break-word col-span-2 mb-6 last:mb-0"
-                          data-testid="booking-title">
-                          {isRoundRobin
-                            ? typeof bookingInfo.title === "string"
-                              ? bookingInfo.title
-                              : eventName
-                            : eventName}
-                        </div>
-                        <div className="font-medium">{t("when")}</div>
-                        <div className="col-span-2 mb-6 last:mb-0">
-                          {reschedule && !!formerTime && (
-                            <p className="line-through">
-                              <RecurringBookings
-                                eventType={eventType}
-                                duration={calculatedDuration}
-                                recurringBookings={props.recurringBookings}
-                                allRemainingBookings={allRemainingBookings}
-                                date={dayjs(formerTime)}
-                                is24h={is24h}
-                                isCancelled={isCancelled}
-                                tz={tz}
-                              />
-                            </p>
-                          )}
-                          <RecurringBookings
-                            eventType={eventType}
-                            duration={calculatedDuration}
-                            recurringBookings={props.recurringBookings}
-                            allRemainingBookings={allRemainingBookings}
-                            date={date}
-                            is24h={is24h}
-                            isCancelled={isCancelled}
-                            tz={tz}
-                          />
-                        </div>
-                        {(bookingInfo?.user || bookingInfo?.attendees) && (
-                          <>
-                            <div className="font-medium">{t("who")}</div>
-                            <div className="col-span-2 last:mb-0">
-                              {bookingInfo?.user && (
-                                <div className="mb-3">
-                                  <div>
-                                    <span data-testid="booking-host-name" className="mr-2">
-                                      {bookingInfo.user.name}
-                                    </span>
-                                    <Badge variant="blue">{t("Host")}</Badge>
-                                  </div>
-                                  {!bookingInfo.eventType?.hideOrganizerEmail && (
-                                    <p className="text-default" data-testid="booking-host-email">
-                                      {bookingInfo?.userPrimaryEmail ?? bookingInfo.user.email}
-                                    </p>
-                                  )}
-                                </div>
-                              )}
-                              {bookingInfo?.attendees.map((attendee) => {
-                                // Check if attendee is a team member/host (for round robin scenarios)
-                                const isTeamMemberOrHost =
-                                  eventType.hosts?.some((host) => host.user.email === attendee.email) ||
-                                  eventType.users?.some((user) => user.email === attendee.email);
-                                const shouldHideEmail =
-                                  bookingInfo.eventType?.hideOrganizerEmail && isTeamMemberOrHost;
-
-                                return (
-                                  <div key={attendee.name + attendee.email} className="mb-3 last:mb-0">
-                                    {attendee.name && (
-                                      <p data-testid={`attendee-name-${attendee.name}`}>{attendee.name}</p>
-                                    )}
-                                    {attendee.phoneNumber && (
-                                      <p data-testid={`attendee-phone-${attendee.phoneNumber}`}>
-                                        {attendee.phoneNumber}
-                                      </p>
-                                    )}
-                                    {!isSmsCalEmail(attendee.email) && !shouldHideEmail && (
-                                      <p data-testid={`attendee-email-${attendee.email}`}>{attendee.email}</p>
-                                    )}
-                                  </div>
-                                );
-                              })}
-                            </div>
-                          </>
-                        )}
-                        {locationToDisplay && !isCancelled && (
-                          <>
-                            <div className="mt-3 font-medium">{t("where")}</div>
-                            <div className="col-span-2 mt-3" data-testid="where">
-                              {!rescheduleLocation || locationToDisplay === rescheduleLocationToDisplay ? (
-                                <DisplayLocation
-                                  locationToDisplay={locationToDisplay}
-                                  providerName={providerName}
-                                />
-                              ) : (
-                                <>
-                                  {!!formerTime && (
-                                    <DisplayLocation
-                                      locationToDisplay={locationToDisplay}
-                                      providerName={providerName}
-                                      className="line-through"
-                                    />
-                                  )}
-
-                                  <DisplayLocation
-                                    locationToDisplay={rescheduleLocationToDisplay}
-                                    providerName={rescheduleProviderName}
-                                  />
-                                </>
-                              )}
-                            </div>
-                          </>
-                        )}
+                      <div className="text-default mt-8 border-t border-subtle pt-8 text-center">
+                        <p className="text-lg font-semibold text-gray-900">
+                          Rendez-vous au 33 rue de Poitou 75003 PARIS le{" "}
+                          {formatToLocalizedDate(date, successLanguage, "full", tz)} à{" "}
+                          {formatToLocalizedTime({ date, locale: successLanguage, hour12: !is24h, timeZone: tz })}
+                        </p>
+                      </div>
+                      <div className="hidden">
                         {props.paymentStatus && (
                           <>
                             <div className="mt-3 font-medium">

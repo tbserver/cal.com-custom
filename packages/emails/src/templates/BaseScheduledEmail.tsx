@@ -68,13 +68,11 @@ export const BaseScheduledEmail = (
       hideLogo={Boolean(props.calEvent.platformClientId)}
       headerType={props.headerType || "checkCircle"}
       subject={props.subject || subject}
-      title={t(
+      title={
         props.title
-          ? props.title
-          : props.calEvent.recurringEvent?.count
-          ? "your_event_has_been_scheduled_recurring"
-          : "your_event_has_been_scheduled"
-      )}
+          ? t(props.title)
+          : `Votre rendez-vous est confirmé le ${getRecipientStart("dddd D MMMM YYYY")} à ${getRecipientStart(timeFormat)}`
+      }
       callToAction={
         props.callToAction === null
           ? null
@@ -122,10 +120,11 @@ export const BaseScheduledEmail = (
         </>
       )}
       {rescheduledBy && <Info label={t("rescheduled_by")} description={rescheduledBy} withSpacer />}
-      <Info label={t("what")} description={props.calEvent.title} withSpacer />
-      <WhenInfo timeFormat={timeFormat} calEvent={props.calEvent} t={t} timeZone={timeZone} locale={locale} />
-      <WhoInfo calEvent={props.calEvent} t={t} />
-      <LocationInfo calEvent={props.calEvent} t={t} />
+      <Info
+        label=""
+        description={`Rendez-vous au 33 rue de Poitou 75003 PARIS le ${getRecipientStart("dddd D MMMM YYYY")} à ${getRecipientStart(timeFormat)}`}
+        withSpacer
+      />
       <Info label={t("description")} description={props.calEvent.description} withSpacer formatted />
       <Info label={t("additional_notes")} description={props.calEvent.additionalNotes} withSpacer formatted />
       {props.includeAppsStatus && <AppsStatus calEvent={props.calEvent} t={t} />}
