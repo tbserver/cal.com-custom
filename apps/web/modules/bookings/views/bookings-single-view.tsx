@@ -568,13 +568,6 @@ export default function Success(props: PageProps) {
                         (bookingInfo.status === BookingStatus.CANCELLED ||
                           bookingInfo.status === BookingStatus.REJECTED) && <h4>{paymentStatusMessage}</h4>}
 
-                      <div className="text-default mt-8 border-t border-subtle pt-8 text-center">
-                        <p className="text-lg font-semibold text-gray-900">
-                          Rendez-vous au 33 rue de Poitou 75003 PARIS le{" "}
-                          {formatToLocalizedDate(date, successLanguage, "full", tz)} à{" "}
-                          {formatToLocalizedTime({ date, locale: successLanguage, hour12: !is24h, timeZone: tz })}
-                        </p>
-                      </div>
                       <div className="hidden">
                         {props.paymentStatus && (
                           <>

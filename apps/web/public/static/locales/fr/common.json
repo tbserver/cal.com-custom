@@ -447,7 +447,7 @@
   "email_sign_in_subject": "Votre lien de connexion pour {{appName}}",
   "round_robin_emailed_you_and_attendees": "Vous avez rendez-vous avec {{user}}. Nous avons envoyé un e-mail avec une invitation de calendrier comprenant les détails à tout le monde.",
   "round_robin_emailed_host_and_attendee": "{{host}} a un rendez-vous avec {{attendee}}. Nous avons envoyé un e-mail avec une invitation calendrier contenant tous les détails aux participants.",
-  "emailed_host_and_attendee": "Nous avons envoyé un e-mail avec une invitation calendrier contenant tous les détails aux participants.",
+  "emailed_host_and_attendee": "Nous avons envoyé un e-mail avec une invitation calendrier contenant tous les détails.",
   "emailed_host_and_attendee_recurring": "Nous avons envoyé un e-mail avec une invitation calendrier contenant tous les détails aux participants pour le premier de ces événements récurrents.",
   "round_robin_emailed_you_and_attendees_recurring": "Vous avez un rendez-vous avec {{user}}. Nous avons envoyé un e-mail avec une invitation calendrier contenant tous les détails aux participants pour le premier de ces événements récurrents.",
   "round_robin_emailed_host_and_attendee_recurring": "{{host}} a un rendez-vous avec {{attendee}}. Nous avons envoyé un e-mail avec une invitation calendrier contenant tous les détails aux participants pour le premier de ces événements récurrents.",
