@@ -46,7 +46,7 @@ export const BaseScheduledEmail = (
   const subject = t(props.subject || "confirmed_event_type_subject", {
     eventType: props.calEvent.type,
     name: props.calEvent.team?.name || props.calEvent.organizer.name,
-    date: `${getRecipientStart("h:mma")} - ${getRecipientEnd("h:mma")}, ${t(
+    date: `${getRecipientStart("HH:mm")} - ${getRecipientEnd("HH:mm")}, ${t(
       getRecipientStart("dddd").toLowerCase()
     )}, ${t(getRecipientStart("MMMM").toLowerCase())} ${getRecipientStart("D, YYYY")}`,
     interpolation: { escapeValue: false },
@@ -72,7 +72,7 @@ export const BaseScheduledEmail = (
       title={
         props.title
           ? t(props.title)
-          : `Votre rendez-vous à la braderie TAMMY & BENJAMIN est confirmé le ${getRecipientStart("dddd D MMMM YYYY")} à ${getRecipientStart(timeFormat)}`
+          : `Votre rendez-vous à la braderie TAMMY & BENJAMIN est confirmé le ${getRecipientStart("dddd D MMMM YYYY")} à ${getRecipientStart("HH:mm")}`
       }
       callToAction={
         props.callToAction === null
@@ -123,7 +123,7 @@ export const BaseScheduledEmail = (
       {rescheduledBy && <Info label={t("rescheduled_by")} description={rescheduledBy} withSpacer />}
       <Info
         label=""
-        description={`Rendez-vous au 33 rue de Poitou 75003 PARIS le ${getRecipientStart("dddd D MMMM YYYY")} à ${getRecipientStart(timeFormat)}`}
+        description={`Rendez-vous au 33 rue de Poitou 75003 PARIS le ${getRecipientStart("dddd D MMMM YYYY")} à ${getRecipientStart("HH:mm")}`}
         withSpacer
       />
       <Info label={t("description")} description={props.calEvent.description} withSpacer formatted />
