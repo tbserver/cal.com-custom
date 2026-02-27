@@ -1,5 +1,6 @@
 import type { TFunction } from "i18next";
 
+import "@calcom/dayjs/locales";
 import dayjs from "@calcom/dayjs";
 import { formatPrice } from "@calcom/lib/currencyConversions";
 import { TimeFormat } from "@calcom/lib/timeFormat";
@@ -71,14 +72,14 @@ export const BaseScheduledEmail = (
       title={
         props.title
           ? t(props.title)
-          : `Votre rendez-vous est confirmé le ${getRecipientStart("dddd D MMMM YYYY")} à ${getRecipientStart(timeFormat)}`
+          : `Votre rendez-vous à la braderie TAMMY & BENJAMIN est confirmé le ${getRecipientStart("dddd D MMMM YYYY")} à ${getRecipientStart(timeFormat)}`
       }
       callToAction={
         props.callToAction === null
           ? null
           : props.callToAction || <ManageLink attendee={props.attendee} calEvent={props.calEvent} />
       }
-      subtitle={props.subtitle || <>{t("emailed_you_and_any_other_attendees")}</>}>
+      subtitle={props.subtitle || undefined}>
       {props.calEvent.rejectionReason && (
         <>
           <Info label={t("rejection_reason")} description={props.calEvent.rejectionReason} withSpacer />

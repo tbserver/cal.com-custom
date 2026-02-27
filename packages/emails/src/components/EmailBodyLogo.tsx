@@ -59,7 +59,7 @@ const EmailBodyLogo = () => {
                             fontSize: "13px",
                           }}
                           width="180"
-                          alt="Tammy &amp; Benjamin"
+                          alt="TAMMY &amp; BENJAMIN"
                         />
                       </a>
                     </td>

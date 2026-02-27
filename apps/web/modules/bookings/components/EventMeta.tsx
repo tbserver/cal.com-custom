@@ -172,7 +172,7 @@ export const EventMeta = ({
               Merci pour votre inscription !
             </p>
             <p className="mb-3 text-gray-600">
-              Vous allez recevoir un email avec toutes les informations de la braderie Tammy &amp; Benjamin.
+              Vous allez recevoir un email avec toutes les informations de la braderie TAMMY &amp; BENJAMIN.
             </p>
             <div className="border-t border-gray-200 pt-3">
               <p className="font-semibold text-gray-900">On se retrouve du 6 au 10 mars</p>

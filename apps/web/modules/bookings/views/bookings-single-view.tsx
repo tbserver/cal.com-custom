@@ -461,7 +461,7 @@ export default function Success(props: PageProps) {
 
     const formattedDate = formatToLocalizedDate(date, successLanguage, "full", tz);
     const formattedTime = formatToLocalizedTime({ date, locale: successLanguage, hour12: !is24h, timeZone: tz });
-    return `Votre rendez-vous est confirmé le ${formattedDate} à ${formattedTime}`;
+    return `Votre rendez-vous à la braderie TAMMY & BENJAMIN est confirmé le ${formattedDate} à ${formattedTime}`;
   })();
 
   return (
@@ -561,7 +561,7 @@ export default function Success(props: PageProps) {
                         {successPageHeadline}
                       </h3>
 
-                      <div className="mt-3">
+                      <div className="mt-3 hidden">
                         <p className="text-default">{getTitle()}</p>
                       </div>
                       {props.paymentStatus &&
