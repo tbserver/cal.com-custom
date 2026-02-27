@@ -20,6 +20,8 @@ services:
       - "traefik.http.routers.calcom.tls=true"
       - "traefik.http.routers.calcom.tls.certresolver=myresolver"
       - "traefik.http.services.calcom.loadbalancer.server.port=3000"
+    volumes:
+      - ./custom.css:/app/apps/web/public/custom.css:ro
     restart: unless-stopped
 
   calcom_db:

@@ -18,6 +18,7 @@ import dynamic from "next/dynamic";
 import { useEffect, useMemo } from "react";
 import { shallow } from "zustand/shallow";
 import i18nConfigration from "../../../../../i18n.json";
+import { EventDetailBlocks } from "@calcom/features/bookings/types";
 import { EventDetails, EventMembers, EventMetaSkeleton, EventTitle } from "./event-meta";
 import { ScrollableWithGradients } from "./ScrollableWithGradients";
 
@@ -164,21 +165,9 @@ export const EventMeta = ({
       )}
       {!isPending && !!event && (
         <m.div {...fadeInUp} layout transition={{ ...fadeInUp.transition, delay: 0.3 }}>
-          <EventMembers
-            schedulingType={event.schedulingType}
-            users={event.subsetOfUsers}
-            profile={event.profile}
-            entity={event.entity}
-            isPrivateLink={isPrivateLink}
-            roundRobinHideOrgAndTeam={roundRobinHideOrgAndTeam}
-            hideOrgTeamAvatar={hideOrgTeamAvatar}
-          />
-          <EventTitle className={`${classNames?.eventMetaTitle} my-2`}>
-            {translatedTitle ?? event?.title}
-          </EventTitle>
 
-          {/* Custom braderie info block */}
-          <div className="my-4 rounded-lg bg-gray-50 px-4 py-3 text-sm leading-relaxed text-gray-700">
+          {/* Custom braderie info block — top */}
+          <div className="mb-4 px-4 py-3 text-sm leading-relaxed text-gray-700">
             <p className="mb-2 text-base font-bold uppercase text-gray-900">
               Merci pour votre inscription !
             </p>
@@ -191,6 +180,8 @@ export const EventMeta = ({
               <p>🕐 Tous les jours de 12h à 19h30</p>
             </div>
           </div>
+
+          {/* Hidden: avatar + "TAMMY & BENJAMIN - Braderie" + event title */}
 
           {(event.description || translatedDescription) && (
             <EventMetaBlock data-testid="event-meta-description" contentClassName="mb-8">
@@ -233,45 +224,7 @@ export const EventMeta = ({
                 />
               </EventMetaBlock>
             )}
-            <EventDetails event={event} />
-            <EventMetaBlock
-              className="cursor-pointer [&_.current-timezone:before]:focus-within:opacity-100 [&_.current-timezone:before]:hover:opacity-100"
-              contentClassName="relative max-w-[90%]"
-              icon="globe">
-              {bookerState === "booking" ? (
-                <>{timezone}</>
-              ) : (
-                <span
-                  className={`current-timezone before:bg-subtle min-w-32 -mt-[2px] flex h-6 max-w-full items-center justify-start before:absolute before:inset-0 before:bottom-[-3px] before:left-[-30px] before:top-[-3px] before:w-[calc(100%+35px)] before:rounded-md before:py-3 before:opacity-0 before:transition-opacity ${
-                    event.lockTimeZoneToggleOnBookingPage ? "cursor-not-allowed" : ""
-                  }`}
-                  data-testid="event-meta-current-timezone">
-                  <TimezoneSelect
-                    timeZones={timeZones}
-                    menuPosition="absolute"
-                    timezoneSelectCustomClassname={classNames?.eventMetaTimezoneSelect}
-                    classNames={{
-                      control: () =>
-                        "min-h-0! p-0 w-full border-0 bg-transparent focus-within:ring-0 shadow-none!",
-                      menu: () => "w-64! max-w-[90vw] mb-1 ",
-                      singleValue: () => "text-text py-1",
-                      indicatorsContainer: () => "ml-auto",
-                      container: () => "max-w-full",
-                    }}
-                    value={
-                      event.lockTimeZoneToggleOnBookingPage
-                        ? event.lockedTimeZone || CURRENT_TIMEZONE
-                        : timezone
-                    }
-                    onChange={({ value }) => {
-                      setTimezone(value);
-                      setBookerStoreTimezone(value);
-                    }}
-                    isDisabled={event.lockTimeZoneToggleOnBookingPage}
-                  />
-                </span>
-              )}
-            </EventMetaBlock>
+            <EventDetails event={event} blocks={[EventDetailBlocks.REQUIRES_CONFIRMATION, EventDetailBlocks.OCCURENCES, EventDetailBlocks.PRICE]} />
             {bookerState === "booking" && eventTotalSeats && bookingSeatAttendeesQty ? (
               <EventMetaBlock icon="user" className={`${colorClass}`}>
                 <div className="text-bookinghighlight flex items-start text-sm">

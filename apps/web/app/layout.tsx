@@ -114,22 +114,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       suppressHydrationWarning
       data-nextjs-router="app">
       <head nonce={nonce}>
-        <link
-          rel="stylesheet"
-          href="https://fonts.cdnfonts.com/css/proxima-nova-2"
-        />
+        <link rel="stylesheet" href="/custom.css" />
         <style>{`
           :root {
             --font-sans: ${interFont.style.fontFamily.replace(/\'/g, "")};
             --font-cal: ${calFont.style.fontFamily.replace(/\'/g, "")};
-          }
-          [data-testid="event-meta"] {
-            font-family: 'Proxima Nova', 'Inter', sans-serif !important;
-            letter-spacing: 1px;
-          }
-          [data-testid="event-meta"] * {
-            font-family: inherit !important;
-            letter-spacing: inherit;
           }
         `}</style>
         {process.env.NODE_ENV === "development" && (
