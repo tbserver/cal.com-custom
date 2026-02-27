@@ -35,11 +35,11 @@ export const BaseScheduledEmail = (
   const timeFormat = timeFormat_ ?? TimeFormat.TWELVE_HOUR;
 
   function getRecipientStart(format: string) {
-    return dayjs(props.calEvent.startTime).tz(timeZone).format(format);
+    return dayjs(props.calEvent.startTime).tz(timeZone).locale("fr").format(format);
   }
 
   function getRecipientEnd(format: string) {
-    return dayjs(props.calEvent.endTime).tz(timeZone).format(format);
+    return dayjs(props.calEvent.endTime).tz(timeZone).locale("fr").format(format);
   }
 
   const subject = t(props.subject || "confirmed_event_type_subject", {

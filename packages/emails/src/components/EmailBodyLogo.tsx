@@ -1,12 +1,10 @@
-import { WEBAPP_URL } from "@calcom/lib/constants";
-
 import RawHtml from "./RawHtml";
 import Row from "./Row";
 
 const CommentIE = ({ html = "" }) => <RawHtml html={`<!--[if mso | IE]>${html}<![endif]-->`} />;
 
 const EmailBodyLogo = () => {
-  const image = `${WEBAPP_URL}/emails/logo.png`;
+  const image = "https://www.tammyandbenjamin.com/cdn/shop/files/Logo_400px_420x.png?v=1653403380";
 
   return (
     <>
@@ -45,22 +43,23 @@ const EmailBodyLogo = () => {
                     wordBreak: "break-word",
                   }}>
                   <Row border="0" style={{ borderCollapse: "collapse", borderSpacing: "0px" }}>
-                    <td style={{ width: "89px" }}>
-                      <a href={WEBAPP_URL} target="_blank" rel="noreferrer">
+                    <td style={{ width: "180px" }}>
+                      <a href="https://www.tammyandbenjamin.com" target="_blank" rel="noreferrer">
                         <img
-                          height="19"
+                          height="auto"
                           src={image}
                           style={{
                             border: "0",
                             display: "block",
                             outline: "none",
                             textDecoration: "none",
-                            height: "19px",
+                            height: "auto",
                             width: "100%",
+                            maxWidth: "180px",
                             fontSize: "13px",
                           }}
-                          width="89"
-                          alt=""
+                          width="180"
+                          alt="Tammy &amp; Benjamin"
                         />
                       </a>
                     </td>
