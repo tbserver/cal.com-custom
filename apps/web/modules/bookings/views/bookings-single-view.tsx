@@ -68,6 +68,11 @@ import { RoutingTraceSheet } from "@calcom/web/components/booking/RoutingTraceSh
 import EventReservationSchema from "@calcom/web/components/schemas/EventReservationSchema";
 import { timeZone } from "@calcom/web/lib/clock";
 
+import {
+  ProductPickerModal,
+  type SelectedProduct,
+} from "@calcom/web/modules/bookings/components/ProductPickerModal";
+
 import { usePaymentStatus } from "../hooks/usePaymentStatus";
 import type { PageProps } from "./bookings-single-view.getServerSideProps";
 
@@ -212,6 +217,22 @@ export default function Success(props: PageProps) {
   const [rateValue, setRateValue] = useState<number>(defaultRating);
   const [isFeedbackSubmitted, setIsFeedbackSubmitted] = useState(false);
   const [isRoutingTraceSheetOpen, setIsRoutingTraceSheetOpen] = useState(false);
+  const [showProductPicker, setShowProductPicker] = useState(false);
+  const [productsSaved, setProductsSaved] = useState(false);
+
+  const handleProductPickerContinue = async (products: SelectedProduct[]) => {
+    setShowProductPicker(false);
+    try {
+      await fetch("/api/shopify/save-selection", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ bookingUid: bookingInfo.uid, products }),
+      });
+      setProductsSaved(true);
+    } catch {
+      setProductsSaved(true);
+    }
+  };
 
   const mutation = trpc.viewer.public.submitRating.useMutation({
     onSuccess: async () => {
@@ -826,6 +847,36 @@ export default function Success(props: PageProps) {
                         </Button>
                       </div>
                     )}
+                    {!needsConfirmation && !isCancellationMode && isReschedulable && isSuccessBookingPage && !isCancelled && (
+                      <>
+                        <hr className="border-subtle mt-8" />
+                        <div className="flex flex-col items-center pt-6 pb-2">
+                          {productsSaved ? (
+                            <div className="flex items-center gap-2 text-green-600">
+                              <CheckIcon className="h-5 w-5" />
+                              <span className="text-sm font-medium">
+                                Votre pré-sélection a été enregistrée !
+                              </span>
+                            </div>
+                          ) : (
+                            <>
+                              <p className="text-default mb-3 text-sm">
+                                Gagnez du temps le jour J en pré-sélectionnant vos articles favoris.
+                              </p>
+                              <button
+                                type="button"
+                                onClick={() => setShowProductPicker(true)}
+                                className="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-gray-800">
+                                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                </svg>
+                                Pré-sélectionnez vos produits
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      </>
+                    )}
                     {!needsConfirmation && !isCancellationMode && isReschedulable && !!calculatedDuration && (
                       <>
                         <hr className="border-subtle mt-8" />
@@ -1024,6 +1075,11 @@ export default function Success(props: PageProps) {
           </div>
         </div>
       </main>
+      <ProductPickerModal
+        open={showProductPicker}
+        onSkip={() => setShowProductPicker(false)}
+        onContinue={handleProductPickerContinue}
+      />
       <Toaster position="bottom-right" />
     </div>
   );

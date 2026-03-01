@@ -174,13 +174,6 @@ export function ProductPickerModal({ open, onSkip, onContinue }: ProductPickerMo
 
   const selectedList = useMemo(() => Array.from(selections.values()), [selections]);
 
-  const totalPrice = useMemo(
-    () => selectedList.reduce((sum, p) => sum + parseFloat(p.price) * p.quantity, 0),
-    [selectedList]
-  );
-
-  const totalCurrency = selectedList[0]?.currency || "EUR";
-
   if (!open) return null;
 
   return (
@@ -427,11 +420,6 @@ export function ProductPickerModal({ open, onSkip, onContinue }: ProductPickerMo
                   </div>
                 );
               })}
-            </div>
-            {/* Total */}
-            <div className="mt-2 flex justify-between border-t border-gray-200 pt-2 text-sm font-semibold text-gray-900">
-              <span>Total</span>
-              <span>{formatPrice(String(totalPrice), totalCurrency)}</span>
             </div>
           </div>
         )}

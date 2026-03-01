@@ -34,7 +34,7 @@ import { DialogContent } from "@calcom/ui/components/dialog";
 import { UnpublishedEntity } from "@calcom/ui/components/unpublished-entity";
 import PoweredBy from "@calcom/web/modules/ee/common/components/PoweredBy";
 import { AnimatePresence, LazyMotion, m } from "framer-motion";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import StickyBox from "react-sticky-box";
 import { Toaster } from "sonner";
 import { shallow } from "zustand/shallow";
@@ -44,8 +44,6 @@ import { BookFormAsModal } from "./BookEventForm/BookFormAsModal";
 import { DatePicker } from "./DatePicker";
 import { DryRunMessage } from "./DryRunMessage";
 import { EventMeta } from "./EventMeta";
-import { ProductPickerModal } from "./ProductPickerModal";
-import type { SelectedProduct } from "./ProductPickerModal";
 import { HavingTroubleFindingTime } from "./HavingTroubleFindingTime";
 import { Header } from "@calcom/features/bookings/components/Header";
 import { InstantBooking } from "./InstantBooking";
@@ -164,9 +162,6 @@ const BookerComponent = ({
 
   const { bookerFormErrorRef, key, formEmail, bookingForm, errors: formErrors } = bookerForm;
 
-  // ── Shopify Product Picker state ──
-  const [showProductPicker, setShowProductPicker] = useState(false);
-
   const {
     handleBookEvent,
     errors,
@@ -275,38 +270,6 @@ const BookerComponent = ({
   const onSubmit = (timeSlot?: string) =>
     renderConfirmNotVerifyEmailButtonCond ? handleBookEvent(timeSlot) : handleVerifyEmail();
 
-  // ── Shopify Product Picker: intercept confirm to show modal ──
-  const handleConfirmWithProductPicker = useCallback(() => {
-    if (renderConfirmNotVerifyEmailButtonCond) {
-      setShowProductPicker(true);
-    } else {
-      handleVerifyEmail();
-    }
-  }, [renderConfirmNotVerifyEmailButtonCond, handleVerifyEmail]);
-
-  const handleProductPickerSkip = useCallback(() => {
-    setShowProductPicker(false);
-    handleBookEvent();
-  }, [handleBookEvent]);
-
-  const handleProductPickerContinue = useCallback(
-    (products: SelectedProduct[]) => {
-      setShowProductPicker(false);
-      // Build a human-readable summary and compact JSON for the notes field
-      const lines = products.map(
-        (p) =>
-          `• ${p.title}${p.variantTitle !== "Default Title" ? ` (${p.variantTitle})` : ""} × ${p.quantity}`
-      );
-      const summary = `--- Produits réservés ---\n${lines.join("\n")}`;
-      // Inject into the booking form notes
-      const currentNotes = (bookingForm.getValues("responses.notes") as string) || "";
-      const newNotes = currentNotes ? `${currentNotes}\n\n${summary}` : summary;
-      bookingForm.setValue("responses.notes", newNotes);
-      handleBookEvent();
-    },
-    [handleBookEvent, bookingForm]
-  );
-
   const EventBooker = useMemo(() => {
     if (bookerState !== "booking") {
       return null;
@@ -332,7 +295,7 @@ const BookerComponent = ({
             });
           }
         }}
-        onSubmit={() => handleConfirmWithProductPicker()}
+        onSubmit={() => (renderConfirmNotVerifyEmailButtonCond ? handleBookEvent() : handleVerifyEmail())}
         errorRef={bookerFormErrorRef}
         errors={{ ...formErrors, ...errors }}
         isTimeslotUnavailable={!isInstantMeeting && unavailableTimeSlots.includes(selectedTimeslot || "")}
@@ -371,7 +334,8 @@ const BookerComponent = ({
     expiryTime,
     extraOptions,
     formErrors,
-    handleConfirmWithProductPicker,
+    handleBookEvent,
+    handleVerifyEmail,
     key,
     loadingStates,
     onGoBackInstantMeeting,
@@ -718,12 +682,6 @@ const BookerComponent = ({
         </DialogContent>
       </Dialog>
       <Toaster position="bottom-right" />
-      {/* Shopify Product Picker Modal */}
-      <ProductPickerModal
-        open={showProductPicker}
-        onSkip={handleProductPickerSkip}
-        onContinue={handleProductPickerContinue}
-      />
     </>
   );
 };
