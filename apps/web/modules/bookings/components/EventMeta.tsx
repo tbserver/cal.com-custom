@@ -169,7 +169,7 @@ export const EventMeta = ({
           {/* Custom braderie info block — top */}
           <div className="mb-4 px-4 py-3 text-sm leading-relaxed text-gray-700">
             <p className="mb-2 text-base font-bold uppercase text-gray-900">
-              Merci pour votre inscription !
+              Bienvenue à la braderie
             </p>
             <p className="mb-3 text-gray-600">
               Vous allez recevoir un email avec toutes les informations de la braderie TAMMY &amp; BENJAMIN.
