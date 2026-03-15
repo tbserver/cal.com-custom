@@ -3,8 +3,27 @@ services:
     build: .
     container_name: calcom
     environment:
-      - DOPPLER_TOKEN=${DOPPLER_TOKEN}
-      - TZ=Europe/Paris
+      TZ: Europe/Paris
+      CALCOM_ALLOWED_HOSTNAMES: ${CALCOM_ALLOWED_HOSTNAMES:-}
+      CALCOM_CALENDSO_ENCRYPTION_KEY: ${CALCOM_CALENDSO_ENCRYPTION_KEY}
+      CALCOM_DATABASE_DIRECT_URL: ${CALCOM_DATABASE_DIRECT_URL}
+      CALCOM_DATABASE_URL: ${CALCOM_DATABASE_URL}
+      CALCOM_EMAIL_FROM: ${CALCOM_EMAIL_FROM}
+      CALCOM_EMAIL_SERVER_HOST: ${CALCOM_EMAIL_SERVER_HOST}
+      CALCOM_EMAIL_SERVER_PASSWORD: ${CALCOM_EMAIL_SERVER_PASSWORD}
+      CALCOM_EMAIL_SERVER_PORT: ${CALCOM_EMAIL_SERVER_PORT}
+      CALCOM_EMAIL_SERVER_USER: ${CALCOM_EMAIL_SERVER_USER}
+      CALCOM_LICENSE_KEY: ${CALCOM_LICENSE_KEY:-}
+      CALCOM_NEXTAUTH_SECRET: ${CALCOM_NEXTAUTH_SECRET}
+      CALCOM_NEXTAUTH_URL: ${CALCOM_NEXTAUTH_URL}
+      CALCOM_NEXT_PUBLIC_API_V2_URL: ${CALCOM_NEXT_PUBLIC_API_V2_URL}
+      CALCOM_NEXT_PUBLIC_WEBAPP_URL: ${CALCOM_NEXT_PUBLIC_WEBAPP_URL}
+      CALCOM_POSTGRES_DB: ${CALCOM_POSTGRES_DB:-calcom}
+      CALCOM_POSTGRES_PASSWORD: ${CALCOM_POSTGRES_PASSWORD}
+      CALCOM_POSTGRES_USER: ${CALCOM_POSTGRES_USER:-calcom}
+      CALCOM_SHOPIFY_COLLECTION_HANDLE: ${CALCOM_SHOPIFY_COLLECTION_HANDLE}
+      CALCOM_SHOPIFY_STOREFRONT_DOMAIN: ${CALCOM_SHOPIFY_STOREFRONT_DOMAIN}
+      CALCOM_SHOPIFY_STOREFRONT_TOKEN: ${CALCOM_SHOPIFY_STOREFRONT_TOKEN}
     depends_on:
       calcom_db:
         condition: service_healthy
@@ -28,16 +47,16 @@ services:
     image: postgres:16-alpine
     container_name: calcom_db
     environment:
-      - POSTGRES_USER=calcom
+      - POSTGRES_USER=${CALCOM_POSTGRES_USER:-calcom}
       - POSTGRES_PASSWORD=${CALCOM_POSTGRES_PASSWORD:-calcompass}
-      - POSTGRES_DB=calcom
+      - POSTGRES_DB=${CALCOM_POSTGRES_DB:-calcom}
       - TZ=Europe/Paris
     volumes:
       - /mnt/raid0/tbserver/volumes/calcom_postgres:/var/lib/postgresql/data
     networks:
       - calcom_internal
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U calcom -d calcom"]
+      test: ["CMD-SHELL", "pg_isready -U ${CALCOM_POSTGRES_USER:-calcom} -d ${CALCOM_POSTGRES_DB:-calcom}"]
       interval: 5s
       timeout: 5s
       retries: 5

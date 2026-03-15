@@ -28,13 +28,7 @@ FROM node:20-bookworm-slim AS runtime
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        apt-transport-https ca-certificates curl gnupg openssl && \
-        curl -sLf --retry 3 --tlsv1.2 --proto "=https" \
-            "https://packages.doppler.com/public/cli/gpg.DE2A7741A397C129.key" \
-            | gpg --dearmor -o /usr/share/keyrings/doppler-archive-keyring.gpg && \
-        echo "deb [signed-by=/usr/share/keyrings/doppler-archive-keyring.gpg] https://packages.doppler.com/public/cli/deb/debian any-version main" \
-            | tee /etc/apt/sources.list.d/doppler-cli.list && \
-        apt-get update && apt-get install -y --no-install-recommends doppler && \
+        ca-certificates openssl && \
         corepack enable && \
         apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -43,5 +37,4 @@ COPY entrypoint.sh /usr/local/bin/calcom-source-entrypoint.sh
 RUN chmod +x /usr/local/bin/calcom-source-entrypoint.sh
 
 EXPOSE 3000
-ENTRYPOINT ["doppler", "run", "--"]
-CMD ["calcom-source-entrypoint.sh"]
+ENTRYPOINT ["calcom-source-entrypoint.sh"]
